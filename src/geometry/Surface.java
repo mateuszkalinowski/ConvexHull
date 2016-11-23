@@ -1,13 +1,15 @@
 package geometry;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
 
 /**
  * Created by Mateusz on 21.11.2016.
- * Project ConvexHull
+ * Project core.ConvexHull
  */
 public class Surface {
     public Surface() {
@@ -35,6 +37,20 @@ public class Surface {
         }
         return result;
     }
+
+    public int getMaxNorth(){return 0;}
+    public int getMaxSouth(){return 0;}
+    public int getMaxEast(){return 0;}
+    public int getMaxWest(){return 0;}
+
+
+    public ArrayList<Point> returnPointsAsArray() {
+        ArrayList<Point> toReturn = new ArrayList<>();
+        for(Point e : points)
+            toReturn.add(e);
+        return toReturn;
+    }
+
     public Polygon createConvexHull(){
         Polygon convexHull = new Polygon();
         if(points.isEmpty())

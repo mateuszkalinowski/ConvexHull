@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Mateusz on 21.11.2016.
- * Project ConvexHull
+ * Project core.ConvexHull
  */
 public class Polygon {
     public Polygon(){
@@ -24,6 +24,9 @@ public class Polygon {
             polygon+=e+System.lineSeparator();
         }
         return polygon;
+    }
+    public ArrayList<Point> returnPointsAsArray(){
+        return points;
     }
 
     private ArrayList<Point> points;

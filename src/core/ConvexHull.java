@@ -1,14 +1,21 @@
-import geometry.*;
+package core;
 
+import geometry.*;
+import geometry.Point;
+import geometry.Polygon;
+import gui.MainWindow;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 
 /**
  * Created by Mateusz on 21.11.2016.
- * Project ConvexHull
+ * Project core.ConvexHull
  */
 public class ConvexHull {
     public static void main(String[] args) {
-        Surface mainSurface = new Surface();
+        mainSurface = new Surface();
         Random rnd = new Random();
        /* for(int i = 0; i < 5; i ++) {
             int x = rnd.nextInt(1000);
@@ -26,8 +33,19 @@ public class ConvexHull {
         mainSurface.add(new Point(12,11));
         mainSurface.add(new Point(16,7));
         mainSurface.add(new Point(10,1));
-        Polygon convexHull = mainSurface.createConvexHull();
-        System.out.println(mainSurface);
-        System.out.println(convexHull);
+        convexHull = mainSurface.createConvexHull();
+       // System.out.println(mainSurface);
+       // System.out.println(convexHull);
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                mainFrame = new MainWindow();
+                mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                mainFrame.setVisible(true);
+            }
+        });
     }
+    public static Polygon convexHull;
+    public static Surface mainSurface;
+    public static MainWindow mainFrame;
 }

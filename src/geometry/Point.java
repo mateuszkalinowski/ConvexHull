@@ -2,7 +2,7 @@ package geometry;
 
 /**
  * Created by Mateusz on 21.11.2016.
- * Project ConvexHull
+ * Project core.ConvexHull
  */
 public class Point {
     private int x;
