@@ -1,5 +1,4 @@
-import geometry.Point;
-import geometry.Surface;
+import geometry.*;
 
 import java.util.Random;
 
@@ -11,11 +10,24 @@ public class ConvexHull {
     public static void main(String[] args) {
         Surface mainSurface = new Surface();
         Random rnd = new Random();
-        for(int i = 0; i < 1000; i ++) {
+       /* for(int i = 0; i < 5; i ++) {
             int x = rnd.nextInt(1000);
             int y = rnd.nextInt(1000);
             mainSurface.add(new Point(x,y));
-        }
-        System.out.println(mainSurface);
+        }*/
+        mainSurface.add(new Point(18,4));
+        mainSurface.add(new Point(12,4));
+        mainSurface.add(new Point(8,5));
+        mainSurface.add(new Point(17,9));
+        mainSurface.add(new Point(6,2));
+        mainSurface.add(new Point(6,6));
+        mainSurface.add(new Point(5,8));
+        mainSurface.add(new Point(10,8));
+        mainSurface.add(new Point(12,11));
+        mainSurface.add(new Point(16,7));
+        Polygon convexHull = mainSurface.createConvexHull();
+       // System.out.println(mainSurface);
+
+        System.out.println(convexHull);
     }
 }
