@@ -45,18 +45,21 @@ public class Surface {
                 first = e;
         }
         convexHull.addPoint(first);
+        int firstx = first.getX();
+        int firsty = first.getY();
         Point previous = first;
 
         Double previousAngle = 0.0;
 
         Double smallestAngle = null;
 
-
+        Integer x = null;
+        Integer y = null;
         int counter = 0;
         do {
             counter++;
-            Integer x = null;
-            Integer y = null;
+                x = null;
+                y = null;
                 for (Point e : points) {
                     Double angle = null;
                     if(!e.equals(previous)) {
@@ -68,47 +71,39 @@ public class Surface {
 
                         if (x1 > x2 && y1 > y2) {
                             angle = (y1 - y2) / distance;
-                            System.out.println("Używam: 0q");
                         }
                         if (x1 < x2 && y1 > y2) {
                             angle = 1 + (x2 - x1) / distance;
-                            System.out.println("Używam: 1q");
                         }
                         if (x1 < x2 && y1 < y2) {
                             angle = 2 + (y2 - y1) / distance;
-                            System.out.println("Używam: 2q");
                         }
                         if (x1 > x2 && y1 < y2) {
                             angle = 3 + (x1 - x2) / distance;
-                            System.out.println("Używam: 3q");
                         }
                         if(x1==x2) {
                             if(y1>y2) {
                                 angle = 1.0;
-                                System.out.println("Używam: 1kąt");
                             }
                             if(y1<y2) {
-                                System.out.println("Używam: 3kąt");
                                 angle = 3.0;
                             }
                         }
                         if(y1==y2) {
                             if(x1>x2) {
-                                System.out.println("Używam: 4kąt");
                                 angle = 0.0;
                             }
                             if(x1 < x2) {
-                                System.out.println("Używam: 2kąt");
                                 angle = 2.0;
                             }
                         }
-                        if(x==null && y==null) {
+                        if(x==null && y==null && angle>previousAngle) {
                             smallestAngle = angle;
                             x = e.getX();
                             y = e.getY();
                         }
-                        else {
-                            if(angle<smallestAngle && angle>previousAngle) {
+                        else if (x!=null && y!=null && previousAngle!=null) {
+                            if(angle<smallestAngle && angle>=previousAngle) {
                                 smallestAngle = angle;
                                 x = e.getX();
                                 y = e.getY();
@@ -116,11 +111,18 @@ public class Surface {
                         }
                     }
                 }
-            previousAngle = smallestAngle;
-            convexHull.addPoint(new Point(x,y));
-            previous = new Point(x,y);
+            if(x==null && y==null) {
+                previousAngle=0.0;
+            }
+            else {
+                if(x==firstx&&y==firsty)
+                    break;
+                previousAngle = smallestAngle;
+                convexHull.addPoint(new Point(x, y));
+                previous = new Point(x, y);
+            }
 
-        }while(counter<3);
+        }while(true);
 
         return convexHull;
     }
