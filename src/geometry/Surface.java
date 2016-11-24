@@ -25,7 +25,9 @@ public class Surface {
     public void remove(Point point) {
         points.remove(point);
     }
-
+    public void removeAll(){
+        points.clear();
+    }
     @Override
     public String toString() {
         String result = "";
@@ -37,7 +39,14 @@ public class Surface {
         }
         return result;
     }
-
+    public boolean isEmpty(){
+        return points.isEmpty();
+    }
+    public boolean contains(Point e){
+        if(points.contains(e))
+            return true;
+        return false;
+    }
     public Point getMaxNorth(){
         if(points==null)
             return null;
@@ -120,7 +129,6 @@ public class Surface {
                         int y1 = e.getY();
                         int y2 = previous.getY();
                         double distance = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-
                         if (x1 > x2 && y1 > y2) {
                             angle = (y1 - y2) / distance;
                         }

@@ -16,41 +16,18 @@ import java.util.Random;
 public class ConvexHull {
     public static void main(String[] args) {
         mainSurface = new Surface();
-        Random rnd = new Random();
-        for(int i = 0; i < 50; i ++) {
-            int x = rnd.nextInt(40)-20;
-            int y = rnd.nextInt(40)-20;
+       // Random rnd = new Random();
+        //rnd.setSeed(1);
+       /* for(int i = 0; i < 8; i ++) {
+            int x = rnd.nextInt(100)-50;
+            int y = rnd.nextInt(100)-50;
             mainSurface.add(new Point(x,y));
-        }
-      /*  mainSurface.add(new Point(0,0));
-        mainSurface.add(new Point(1,1));
-        mainSurface.add(new Point(2,2));
-        mainSurface.add(new Point(3,3));*/
-       /* mainSurface.add(new Point(12,4));
-        mainSurface.add(new Point(8,5));
-        mainSurface.add(new Point(17,9));
-        mainSurface.add(new Point(6,2));
-        mainSurface.add(new Point(6,6));
-        mainSurface.add(new Point(5,8));
-        mainSurface.add(new Point(10,8));
-        mainSurface.add(new Point(18,4));
-        mainSurface.add(new Point(12,11));
-        mainSurface.add(new Point(16,7));
-        mainSurface.add(new Point(10,1));*/
-      /*  mainSurface.add(new Point(-10,-10));
-        mainSurface.add(new Point(10,10));
-        mainSurface.add(new Point(-10,10));
-        mainSurface.add(new Point(10,-10));*/
-        convexHull = mainSurface.createConvexHull();
-        //System.out.println(mainSurface);
-        //System.out.println(convexHull);
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                mainFrame = new MainWindow();
-                mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                mainFrame.setVisible(true);
-            }
+        }*/
+        //convexHull = mainSurface.createConvexHull();
+        EventQueue.invokeLater(() -> {
+            mainFrame = new MainWindow();
+            mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            mainFrame.setVisible(true);
         });
     }
     public static Polygon convexHull;
