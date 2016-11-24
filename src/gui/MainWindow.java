@@ -8,7 +8,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 import static core.ConvexHull.convexHull;
 import static core.ConvexHull.mainSurface;
@@ -20,8 +27,23 @@ import static core.ConvexHull.mainSurface;
 public class MainWindow extends JFrame {
     public MainWindow(){
         setTitle("ConvexHull Generator");
-        setSize(800,450);
+        setSize(900,650);
         setLocationRelativeTo(null);
+
+        JMenuBar mainMenu = new JMenuBar();
+        mainMenu.setSize(50,50);
+        setJMenuBar(mainMenu);
+
+        JMenu fileMenu = new JMenu("Plik");
+        JMenu editMenu = new JMenu("Edycja");
+        mainMenu.add(fileMenu);
+        mainMenu.add(editMenu);
+
+        JMenuItem exitAction = new JMenuItem("Zakończ");
+        exitAction.addActionListener(e -> {
+            System.exit(0);
+        });
+        exitAction.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
         JPanel mainBorderLayout = new JPanel(new BorderLayout());
         JPanel rightBorderLayout = new JPanel(new BorderLayout());
@@ -144,6 +166,60 @@ public class MainWindow extends JFrame {
                 repaint();
             }
         });
+
+        JMenuItem exportPointAction = new JMenuItem("Eksportuj Punkty");
+        exportPointAction.addActionListener(e ->{
+            JFileChooser chooseFile = new JFileChooser();
+            int save = chooseFile.showSaveDialog(null);
+            if (save == JFileChooser.APPROVE_OPTION) {
+                String filename = chooseFile.getSelectedFile().getPath();
+                PrintWriter writer;
+                try {
+                    writer = new PrintWriter(filename, "UTF-8");
+                    for (int i = 0; i < pointsListModel.size(); i++)
+                        writer.println(pointsListModel.getElementAt(i));
+
+                    writer.close();
+                } catch (FileNotFoundException | UnsupportedEncodingException exception) {
+                    JOptionPane.showMessageDialog(null, "Nie można wyeksportować danych do tego pliku.", "Błąd" +
+                            " danych",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        JMenuItem importPointAction = new JMenuItem("Importuj Punkty");
+        importPointAction.addActionListener( e ->{
+            JFileChooser chooseFile = new JFileChooser();
+            int save = chooseFile.showOpenDialog(null);
+            if (save == JFileChooser.APPROVE_OPTION) {
+                String filename = chooseFile.getSelectedFile().getPath();
+                String line;
+                try {
+                    Scanner in = new Scanner(new File(filename));
+                    while (in.hasNextLine()) {
+                        line = in.nextLine();
+                        String x = line.split(",")[0];
+                        String y = line.split(",")[1];
+                        x = x.substring(3,x.length());
+                        y = y.substring(4,y.length());
+                        mainSurface.add(new Point(Integer.parseInt(x),Integer.parseInt(y)));
+                        pointsListModel.addElement(line);
+                    }
+                    in.close();
+                    repaint();
+
+                } catch (FileNotFoundException exception) {
+                    JOptionPane.showMessageDialog(null, "Nie można czytać danych z tego pliku.", "Błąd" +
+                            " danych",JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
+
+        fileMenu.add(exportPointAction);
+        fileMenu.add(importPointAction);
+        fileMenu.addSeparator();
+        fileMenu.add(exitAction);
+
         rightBorderLayout.add(testButton,BorderLayout.SOUTH);
 
         Chart chart = new Chart();
