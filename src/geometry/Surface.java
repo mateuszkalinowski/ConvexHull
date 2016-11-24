@@ -38,10 +38,46 @@ public class Surface {
         return result;
     }
 
-    public int getMaxNorth(){return 0;}
-    public int getMaxSouth(){return 0;}
-    public int getMaxEast(){return 0;}
-    public int getMaxWest(){return 0;}
+    public Point getMaxNorth(){
+        if(points==null)
+            return null;
+        Point toReturn = points.iterator().next();
+        for(Point e : points) {
+            if(e.getY()<toReturn.getY())
+                toReturn = e;
+        }
+        return toReturn;
+    }
+    public Point getMaxSouth(){
+        if(points==null)
+            return null;
+        Point toReturn = points.iterator().next();
+        for(Point e : points) {
+            if(e.getY()>toReturn.getY())
+                toReturn=e;
+        }
+        return toReturn;
+    }
+    public Point getMaxEast(){
+        if(points==null)
+            return null;
+        Point toReturn = points.iterator().next();
+        for(Point e : points) {
+            if(e.getX()>toReturn.getX())
+                toReturn = e;
+        }
+        return toReturn;
+    }
+    public Point getMaxWest(){
+        if(points==null)
+            return null;
+        Point toReturn = points.iterator().next();
+        for(Point e : points) {
+            if(e.getX()<toReturn.getX())
+                toReturn = e;
+        }
+        return toReturn;
+    }
 
 
     public ArrayList<Point> returnPointsAsArray() {
