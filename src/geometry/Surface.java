@@ -104,6 +104,10 @@ public class Surface {
         for(Point e: points) {
             if(e.getX()>first.getX())
                 first = e;
+            if(e.getX()==first.getX()) {
+                if(e.getY()<first.getY())
+                    first = e;
+            }
         }
         convexHull.addPoint(first);
         int firstx = first.getX();
@@ -121,6 +125,7 @@ public class Surface {
             counter++;
                 x = null;
                 y = null;
+                Double longestDistance = null;
                 for (Point e : points) {
                     Double angle = null;
                     if(!e.equals(previous)) {
@@ -161,12 +166,19 @@ public class Surface {
                             smallestAngle = angle;
                             x = e.getX();
                             y = e.getY();
+                            longestDistance = distance;
                         }
                         else if (x!=null && y!=null && previousAngle!=null) {
                             if(angle<smallestAngle && angle>=previousAngle) {
                                 smallestAngle = angle;
                                 x = e.getX();
                                 y = e.getY();
+                            }
+                            if(angle.equals(smallestAngle)) {
+                                if(distance>longestDistance)
+                                    x = e.getX();
+                                    y = e.getY();
+                                    longestDistance = distance;
                             }
                         }
                     }

@@ -72,6 +72,15 @@ public class MainWindow extends JFrame {
         pointsList.setPrototypeCellValue("X:   Y:   ");
         JScrollPane pointListScrollPane = new JScrollPane(pointsList);
 
+        final DefaultListModel<String> polygonPointsListModel = new DefaultListModel<>();
+        polygonPointsList = new JList<>();
+        polygonPointsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        polygonPointsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        polygonPointsList.setVisibleRowCount(-1);
+        polygonPointsList = new JList<>(polygonPointsListModel);
+        polygonPointsList.setPrototypeCellValue("X:   Y:   ");
+        JScrollPane polygonPointListScrollPane = new JScrollPane(polygonPointsList);
+
         JPanel rightDownGridLayout = new JPanel(new GridLayout(7,2));
 
         JTextField xValue  = new JTextField();
@@ -142,6 +151,8 @@ public class MainWindow extends JFrame {
         deleteAllPointsButton.addActionListener(e -> {
             mainSurface.removeAll();
             pointsListModel.removeAllElements();
+            convexHull = null;
+            polygonPointsListModel.removeAllElements();
             repaint();
         });
 
@@ -165,6 +176,9 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(pointsListModel.getSize()>=3) {
                     convexHull = mainSurface.createConvexHull();
+                    polygonPointsListModel.removeAllElements();
+                    for(Point point: convexHull.returnPointsAsArray())
+                    polygonPointsListModel.addElement("X: " + point.getX()+ ", Y: " + point.getY());
                 }
                 repaint();
             }
@@ -244,8 +258,12 @@ public class MainWindow extends JFrame {
 
         resultsMainBorderLayout.add(resultsGridLayout,BorderLayout.CENTER);
 
+        resultsGridLayout.add(polygonPointsList);
+
+
         add(mainBorderLayout);
     }
 
     private JList pointsList;
+    private JList polygonPointsList;
 }

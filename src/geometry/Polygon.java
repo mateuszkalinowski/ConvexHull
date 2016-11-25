@@ -14,7 +14,9 @@ public class Polygon {
         this.points = points;
     }
     public void addPoint(Point e) {
-        points.add(e);
+        if(!points.contains(e)) {
+                points.add(e);
+        }
     }
 
     @Override
