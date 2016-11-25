@@ -34,10 +34,14 @@ public class MainWindow extends JFrame {
         mainMenu.setSize(50,50);
         setJMenuBar(mainMenu);
 
+        JTabbedPane rightPanel  = new JTabbedPane();
+
         JMenu fileMenu = new JMenu("Plik");
         JMenu editMenu = new JMenu("Edycja");
+        JMenu helpMenu = new JMenu("Pomoc");
         mainMenu.add(fileMenu);
         mainMenu.add(editMenu);
+        mainMenu.add(helpMenu);
 
         JMenuItem exitAction = new JMenuItem("Zakończ");
         exitAction.addActionListener(e -> {
@@ -50,7 +54,6 @@ public class MainWindow extends JFrame {
 
         JPanel rightGridLayout = new JPanel(new GridLayout(2,1));
         rightBorderLayout.add(rightGridLayout,BorderLayout.CENTER);
-        mainBorderLayout.add(rightBorderLayout, BorderLayout.EAST);
 
         JPanel rightUpBorderLayout = new JPanel(new BorderLayout());
         JPanel rightDownBorderLayout = new JPanel(new BorderLayout());
@@ -214,16 +217,23 @@ public class MainWindow extends JFrame {
 
             }
         });
-
+        JMenuItem infoProgramAction = new JMenuItem("O programie");
+        infoProgramAction.addActionListener(e -> {
+            InfoWindow infoWindow = new InfoWindow();
+            infoWindow.setVisible(true);
+        });
         fileMenu.add(exportPointAction);
         fileMenu.add(importPointAction);
         fileMenu.addSeparator();
         fileMenu.add(exitAction);
+        helpMenu.add(infoProgramAction);
 
         rightBorderLayout.add(testButton,BorderLayout.SOUTH);
 
         Chart chart = new Chart();
         mainBorderLayout.add(chart);
+        mainBorderLayout.add(rightPanel, BorderLayout.EAST);
+        rightPanel.add(rightBorderLayout,"Dane");
         add(mainBorderLayout);
     }
 
