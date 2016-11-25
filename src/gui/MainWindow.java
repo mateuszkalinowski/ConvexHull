@@ -138,7 +138,7 @@ public class MainWindow extends JFrame {
                         " danych",JOptionPane.ERROR_MESSAGE);
             }
         });
-        JButton deleteAllPointsButton = new JButton("Usuń ");
+        JButton deleteAllPointsButton = new JButton("<html><center>Usuń <br>wszystkie</center></html>");
         deleteAllPointsButton.addActionListener(e -> {
             mainSurface.removeAll();
             pointsListModel.removeAllElements();
@@ -234,6 +234,16 @@ public class MainWindow extends JFrame {
         mainBorderLayout.add(chart);
         mainBorderLayout.add(rightPanel, BorderLayout.EAST);
         rightPanel.add(rightBorderLayout,"Dane");
+
+        JPanel resultsMainBorderLayout = new JPanel(new BorderLayout());
+
+        JPanel resultsGridLayout = new JPanel(new GridLayout(2,1));
+
+        rightPanel.add(resultsMainBorderLayout,"Wyniki");
+        resultsMainBorderLayout.add(new JLabel("Punkty Otoczki:",SwingConstants.CENTER),BorderLayout.NORTH);
+
+        resultsMainBorderLayout.add(resultsGridLayout,BorderLayout.CENTER);
+
         add(mainBorderLayout);
     }
 
