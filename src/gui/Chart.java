@@ -22,6 +22,13 @@ public class Chart extends JPanel {
         g2.setColor(Color.BLACK);
         g2.drawLine(margin, getHeight() / 2, getWidth() - margin, getHeight() / 2);
         g2.drawLine(getWidth() / 2, margin, getWidth() / 2, getHeight() - margin);
+        g2.setStroke(new BasicStroke(2));
+        g2.drawLine(getWidth()-margin,getHeight()/2,getWidth()-margin-margin/2,getHeight()/2-margin/2);
+        g2.drawLine(getWidth()-margin-margin/2,getHeight()/2+margin/2,getWidth()-margin,getHeight()/2);
+
+        g2.drawLine(getWidth()/2,margin,getWidth()/2-margin/2,margin+margin/2);
+        g2.drawLine(getWidth()/2,margin,getWidth()/2+margin/2,margin+margin/2);
+        g2.setStroke(new BasicStroke(1));
         int width = 0,height = 0;
         if(!ConvexHull.mainSurface.isEmpty()) {
             int maxNorth = Math.abs(ConvexHull.mainSurface.getMaxNorth().getY());
@@ -29,16 +36,41 @@ public class Chart extends JPanel {
             int maxEast = Math.abs(ConvexHull.mainSurface.getMaxEast().getX());
             int maxWest = Math.abs(ConvexHull.mainSurface.getMaxWest().getX());
 
-            width = (maxEast > maxWest ? maxEast : maxWest) + 1;
-            height = (maxNorth > maxSouth ? maxNorth : maxSouth) + 1;
-            for (int i = -width; i <= width; i++) {
-                double x = (getWidth() - 2 * margin) / 2.0 + (getWidth() - 2 * margin) / 2.0 * (i / (width * 1.0)) + margin;
-                g2.drawLine((int) x, getHeight() / 2 - 5, (int) x, getHeight() / 2 + 5);
+            width = (maxEast > maxWest ? maxEast : maxWest) + 2;
+            height = (maxNorth > maxSouth ? maxNorth : maxSouth) + 2;
+            if(width>height)height = width;
+            if(height>width)width  = height;
+            if(width<100) {
+                for (int i = -width+1; i <= width-1; i++) {
+                    double x = (getWidth() - 2 * margin) / 2.0 + (getWidth() - 2 * margin) / 2.0 * (i / (width * 1.0)) + margin;
+                    g2.drawLine((int) x, getHeight() / 2 - 5, (int) x, getHeight() / 2 + 5);
+                }
             }
-
-            for (int i = -height; i <= height; i++) {
-                double y = (getHeight() - 2 * margin) / 2.0 - (getHeight() - 2 * margin) / 2.0 * (i / (height * 1.0)) + margin;
-                g2.drawLine(getWidth() / 2 - 5, (int) y, getWidth() / 2 + 5, (int) y);
+            else {
+                for (int i = 0; i <= width; i+=width/5) {
+                    double x = (getWidth() - 2 * margin) / 2.0 + (getWidth() - 2 * margin) / 2.0 * (i / (width * 1.0)) + margin;
+                    g2.drawLine((int) x, getHeight() / 2 - 5, (int) x, getHeight() / 2 + 5);
+                }
+                for (int i = 0; i >= -width; i-=width/5) {
+                    double x = (getWidth() - 2 * margin) / 2.0 + (getWidth() - 2 * margin) / 2.0 * (i / (width * 1.0)) + margin;
+                    g2.drawLine((int) x, getHeight() / 2 - 5, (int) x, getHeight() / 2 + 5);
+                }
+            }
+            if(height<100) {
+                for (int i = -height+1; i <= height-1; i++) {
+                    double y = (getHeight() - 2 * margin) / 2.0 - (getHeight() - 2 * margin) / 2.0 * (i / (height * 1.0)) + margin;
+                    g2.drawLine(getWidth() / 2 - 5, (int) y, getWidth() / 2 + 5, (int) y);
+                }
+            }
+            else {
+                for (int i = 0; i <= height; i+=height/5) {
+                    double y = (getHeight() - 2 * margin) / 2.0 - (getHeight() - 2 * margin) / 2.0 * (i / (height * 1.0)) + margin;
+                    g2.drawLine(getWidth() / 2 - 5, (int) y, getWidth() / 2 + 5, (int) y);
+                }
+                for (int i = 0; i >= -height; i-=height/5) {
+                    double y = (getHeight() - 2 * margin) / 2.0 - (getHeight() - 2 * margin) / 2.0 * (i / (height * 1.0)) + margin;
+                    g2.drawLine(getWidth() / 2 - 5, (int) y, getWidth() / 2 + 5, (int) y);
+                }
             }
 
 
