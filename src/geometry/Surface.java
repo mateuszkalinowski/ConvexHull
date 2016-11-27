@@ -52,7 +52,7 @@ public class Surface {
             return null;
         Point toReturn = points.iterator().next();
         for(Point e : points) {
-            if(e.getY()<toReturn.getY())
+            if(e.getY()>toReturn.getY())
                 toReturn = e;
         }
         return toReturn;
@@ -62,7 +62,7 @@ public class Surface {
             return null;
         Point toReturn = points.iterator().next();
         for(Point e : points) {
-            if(e.getY()>toReturn.getY())
+            if(e.getY()<toReturn.getY())
                 toReturn=e;
         }
         return toReturn;
@@ -120,9 +120,7 @@ public class Surface {
 
         Integer x = null;
         Integer y = null;
-        int counter = 0;
         do {
-            counter++;
                 x = null;
                 y = null;
                 Double longestDistance = null;

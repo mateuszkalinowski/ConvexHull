@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static core.ConvexHull.convexHull;
 import static core.ConvexHull.mainSurface;
@@ -47,6 +48,9 @@ public class MainWindow extends JFrame {
         exitAction.addActionListener(e -> {
             System.exit(0);
         });
+
+        JLabel powierzchniaOtoczkiLabel = new JLabel("0");
+
         exitAction.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
         JPanel mainBorderLayout = new JPanel(new BorderLayout());
@@ -101,10 +105,18 @@ public class MainWindow extends JFrame {
                     xValue.setText("");
                     yValue.setText("");
                     mainSurface.add(new Point(x, y));
+                   /* if(convexHull!=null) {
+                        if(!convexHull.isInside(x,y)) {
+                            convexHull = null;
+                            polygonPointsListModel.clear();
+                            powierzchniaOtoczkiLabel.setText("");
+                            powierzchniaOtoczkiLabel.setToolTipText("");
+                        }
+                    }*/
                     repaint();
                 }
             }
-            catch (Exception ignored){
+            catch (NumberFormatException ignored){
                 JOptionPane.showMessageDialog(null, "Wprowadzone współrzędne są niepoprawne!", "Błąd" +
                         " danych",JOptionPane.ERROR_MESSAGE);
             }
@@ -120,6 +132,16 @@ public class MainWindow extends JFrame {
                 y = y.substring(4,y.length());
                 pointsListModel.removeElementAt(i);
                 mainSurface.remove(new Point(Integer.parseInt(x),Integer.parseInt(y)));
+                if(convexHull!=null) {
+                    for(Point point : convexHull.returnPointsAsArray()) {
+                        if(point.getX() == Integer.parseInt(x) && point.getY() == Integer.parseInt(y)) {
+                            convexHull = null;
+                            polygonPointsListModel.clear();
+                            powierzchniaOtoczkiLabel.setText("");
+                            powierzchniaOtoczkiLabel.setToolTipText("");
+                        }
+                    }
+                }
                 repaint();
             }
         });
@@ -136,8 +158,8 @@ public class MainWindow extends JFrame {
             try {
                 Random rnd = new Random();
                 for (int i = 0; i < Integer.parseInt(randomPointsNumber.getText()); i++) {
-                    int x = rnd.nextInt(Integer.parseInt(randomPointsRange.getText())) - Integer.parseInt(randomPointsRange.getText()) / 2;
-                    int y = rnd.nextInt(Integer.parseInt(randomPointsRange.getText())) - Integer.parseInt(randomPointsRange.getText()) / 2;
+                    int x = rnd.nextInt(Integer.parseInt(randomPointsRange.getText())) - Integer.parseInt(randomPointsRange.getText())/2;
+                    int y = rnd.nextInt(Integer.parseInt(randomPointsRange.getText())) - Integer.parseInt(randomPointsRange.getText())/2;
                     mainSurface.add(new geometry.Point(x, y));
                     pointsListModel.addElement("X: " + x + ", Y: " + y);
                 }
@@ -153,6 +175,8 @@ public class MainWindow extends JFrame {
             pointsListModel.removeAllElements();
             convexHull = null;
             polygonPointsListModel.removeAllElements();
+            powierzchniaOtoczkiLabel.setToolTipText("");
+            powierzchniaOtoczkiLabel.setText("");
             repaint();
         });
 
@@ -169,7 +193,6 @@ public class MainWindow extends JFrame {
         rightUpBorderLayout.add(pointListScrollPane,BorderLayout.CENTER);
 
 
-
         JButton testButton = new JButton("Generuj Otoczkę");
         testButton.addActionListener(new ActionListener() {
             @Override
@@ -179,6 +202,38 @@ public class MainWindow extends JFrame {
                     polygonPointsListModel.removeAllElements();
                     for(Point point: convexHull.returnPointsAsArray())
                     polygonPointsListModel.addElement("X: " + point.getX()+ ", Y: " + point.getY());
+
+                    /*for(Point point : mainSurface.returnPointsAsArray()) {
+                        if(!convexHull.isInside(point.getX(),point.getY()))
+                            System.out.println("W środku nie ma: " + point.getX() + " " + point.getY());
+                    }*/
+
+                 /*   int maxY = mainSurface.getMaxNorth().getY();
+                    int minY = mainSurface.getMaxSouth().getY();
+                    int minX = mainSurface.getMaxWest().getX();
+                    int maxX = mainSurface.getMaxEast().getX();
+                    int trafionych = 0;
+                    int zakresX = maxX - minX;
+                    int zakresY = maxY - minY;
+                    Random rnd = new Random();
+                    for(int i = 0; i < 1000;i++) {
+                        double x = ThreadLocalRandom.current().nextDouble(minX, minX+zakresX);
+                        double y = ThreadLocalRandom.current().nextDouble(minY,minY+zakresY);
+                        if(convexHull.isInside(x,y))
+                            trafionych++;
+                    }
+                    double pole = (zakresX*zakresY) * (trafionych*1.0/1000);*/
+                    double pole = convexHull.getArea();
+                    pole = Math.round(pole*1000d)/1000d;
+                    String poleString = "" + pole;
+                    powierzchniaOtoczkiLabel.setToolTipText("");
+                    if(poleString.length()>6) {
+                        powierzchniaOtoczkiLabel.setToolTipText(poleString);
+                        poleString = poleString.substring(0, 6) + "...";
+                    }
+                    powierzchniaOtoczkiLabel.setText("" + poleString);
+
+
                 }
                 repaint();
             }
@@ -258,7 +313,21 @@ public class MainWindow extends JFrame {
 
         resultsMainBorderLayout.add(resultsGridLayout,BorderLayout.CENTER);
 
-        resultsGridLayout.add(polygonPointsList);
+        JPanel resultsDownGridLayout =  new JPanel(new GridLayout(5,2));
+
+        resultsDownGridLayout.add(new JLabel("<html><center>Powierzchnia <br>Otoczki:</center></html>"));
+        resultsDownGridLayout.add(powierzchniaOtoczkiLabel);
+        resultsDownGridLayout.add(new JLabel());
+        resultsDownGridLayout.add(new JLabel());
+        resultsDownGridLayout.add(new JLabel());
+        resultsDownGridLayout.add(new JLabel());
+        resultsDownGridLayout.add(new JLabel());
+        resultsDownGridLayout.add(new JLabel());
+        resultsDownGridLayout.add(new JLabel());
+        resultsDownGridLayout.add(new JLabel());
+
+        resultsGridLayout.add(polygonPointListScrollPane);
+        resultsGridLayout.add(resultsDownGridLayout);
 
 
         add(mainBorderLayout);
