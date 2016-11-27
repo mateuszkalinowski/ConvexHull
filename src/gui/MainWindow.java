@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,7 +42,7 @@ public class MainWindow extends JFrame {
         JMenu editMenu = new JMenu("Edycja");
         JMenu helpMenu = new JMenu("Pomoc");
         mainMenu.add(fileMenu);
-        mainMenu.add(editMenu);
+        //mainMenu.add(editMenu);
         mainMenu.add(helpMenu);
 
         JMenuItem exitAction = new JMenuItem("Zakończ");
@@ -89,6 +90,51 @@ public class MainWindow extends JFrame {
 
         JTextField xValue  = new JTextField();
         JTextField yValue = new JTextField();
+
+        xValue.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    try {
+                        int x = Integer.parseInt(xValue.getText());
+                        int y = Integer.parseInt(yValue.getText());
+                        if(!mainSurface.contains(new Point(x,y))) {
+                            pointsListModel.addElement("X: " + x + ", Y: " + y);
+                            xValue.setText("");
+                            yValue.setText("");
+                            mainSurface.add(new Point(x, y));
+                            repaint();
+                        }
+                    }
+                    catch (NumberFormatException ignored){
+                        JOptionPane.showMessageDialog(null, "Wprowadzone współrzędne są niepoprawne!", "Błąd" +
+                                " danych",JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+        yValue.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    try {
+                        int x = Integer.parseInt(xValue.getText());
+                        int y = Integer.parseInt(yValue.getText());
+                        if(!mainSurface.contains(new Point(x,y))) {
+                            pointsListModel.addElement("X: " + x + ", Y: " + y);
+                            xValue.setText("");
+                            yValue.setText("");
+                            mainSurface.add(new Point(x, y));
+                            repaint();
+                        }
+                    }
+                    catch (NumberFormatException ignored){
+                        JOptionPane.showMessageDialog(null, "Wprowadzone współrzędne są niepoprawne!", "Błąd" +
+                                " danych",JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
 
         rightDownGridLayout.add(new JLabel("X:",SwingConstants.CENTER));
         rightDownGridLayout.add(xValue);
@@ -317,7 +363,26 @@ public class MainWindow extends JFrame {
 
         resultsDownGridLayout.add(new JLabel("<html><center>Powierzchnia <br>Otoczki:</center></html>"));
         resultsDownGridLayout.add(powierzchniaOtoczkiLabel);
-        resultsDownGridLayout.add(new JLabel());
+
+        JButton exportConvexHullButton = new JButton("<html><center>Eksportuj<br>Otoczkę</center></html>");
+        exportConvexHullButton.addActionListener(e -> {
+            JFileChooser chooseFile = new JFileChooser();
+            int save = chooseFile.showSaveDialog(null);
+            if (save == JFileChooser.APPROVE_OPTION) {
+                String filename = chooseFile.getSelectedFile().getPath();
+                PrintWriter writer;
+                try {
+                    writer = new PrintWriter(filename, "UTF-8");
+                    for (int i = 0; i < polygonPointsListModel.size(); i++)
+                        writer.println(polygonPointsListModel.getElementAt(i));
+                    writer.close();
+                } catch (FileNotFoundException | UnsupportedEncodingException exception) {
+                    JOptionPane.showMessageDialog(null, "Nie można wyeksportować danych do tego pliku.", "Błąd" +
+                            " danych",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        resultsDownGridLayout.add(exportConvexHullButton);
         resultsDownGridLayout.add(new JLabel());
         resultsDownGridLayout.add(new JLabel());
         resultsDownGridLayout.add(new JLabel());

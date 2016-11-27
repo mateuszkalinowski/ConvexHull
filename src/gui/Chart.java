@@ -40,32 +40,44 @@ public class Chart extends JPanel {
             height = (maxNorth > maxSouth ? maxNorth : maxSouth) + 2;
             if(width>height)height = width;
             if(height>width)width  = height;
-            if(width<100) {
+            if(width<25) {
                 for (int i = -width+1; i <= width-1; i++) {
                     double x = (getWidth() - 2 * margin) / 2.0 + (getWidth() - 2 * margin) / 2.0 * (i / (width * 1.0)) + margin;
                     g2.drawLine((int) x, getHeight() / 2 - 5, (int) x, getHeight() / 2 + 5);
+                    if(i==1) {
+                        g2.drawString("1",(int) x-3,getHeight()/2+20);
+                    }
                 }
             }
             else {
                 for (int i = 0; i <= width; i+=width/5) {
                     double x = (getWidth() - 2 * margin) / 2.0 + (getWidth() - 2 * margin) / 2.0 * (i / (width * 1.0)) + margin;
                     g2.drawLine((int) x, getHeight() / 2 - 5, (int) x, getHeight() / 2 + 5);
+                    if(i==width/5) {
+                        g2.drawString(width/5+"",(int) x-3,getHeight()/2+20);
+                    }
                 }
                 for (int i = 0; i >= -width; i-=width/5) {
                     double x = (getWidth() - 2 * margin) / 2.0 + (getWidth() - 2 * margin) / 2.0 * (i / (width * 1.0)) + margin;
                     g2.drawLine((int) x, getHeight() / 2 - 5, (int) x, getHeight() / 2 + 5);
                 }
             }
-            if(height<100) {
+            if(height<25) {
                 for (int i = -height+1; i <= height-1; i++) {
                     double y = (getHeight() - 2 * margin) / 2.0 - (getHeight() - 2 * margin) / 2.0 * (i / (height * 1.0)) + margin;
                     g2.drawLine(getWidth() / 2 - 5, (int) y, getWidth() / 2 + 5, (int) y);
+                    if(i==1) {
+                        g2.drawString("1",getWidth()/2+10,(int) y+3);
+                    }
                 }
             }
             else {
                 for (int i = 0; i <= height; i+=height/5) {
                     double y = (getHeight() - 2 * margin) / 2.0 - (getHeight() - 2 * margin) / 2.0 * (i / (height * 1.0)) + margin;
                     g2.drawLine(getWidth() / 2 - 5, (int) y, getWidth() / 2 + 5, (int) y);
+                    if(i==height/5) {
+                        g2.drawString(height/5+"",getWidth()/2+10,(int) y+3);
+                    }
                 }
                 for (int i = 0; i >= -height; i-=height/5) {
                     double y = (getHeight() - 2 * margin) / 2.0 - (getHeight() - 2 * margin) / 2.0 * (i / (height * 1.0)) + margin;

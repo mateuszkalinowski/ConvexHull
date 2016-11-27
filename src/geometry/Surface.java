@@ -117,10 +117,11 @@ public class Surface {
         Double previousAngle = 0.0;
 
         Double smallestAngle = null;
-
+        int counter = 0;
         Integer x = null;
         Integer y = null;
         do {
+                counter++;
                 x = null;
                 y = null;
                 Double longestDistance = null;
@@ -171,12 +172,14 @@ public class Surface {
                                 smallestAngle = angle;
                                 x = e.getX();
                                 y = e.getY();
+                                longestDistance = distance;
                             }
                             if(angle.equals(smallestAngle)) {
-                                if(distance>longestDistance)
+                                if(distance>longestDistance) {
                                     x = e.getX();
                                     y = e.getY();
                                     longestDistance = distance;
+                                }
                             }
                         }
                     }
@@ -191,7 +194,8 @@ public class Surface {
                 convexHull.addPoint(new Point(x, y));
                 previous = new Point(x, y);
             }
-
+            if(counter>10)
+                break;
         }while(true);
 
         return convexHull;
