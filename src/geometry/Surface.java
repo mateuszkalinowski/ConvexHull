@@ -161,7 +161,7 @@ public class Surface {
                                 angle = 2.0;
                             }
                         }
-                        if(x==null && y==null && angle>previousAngle) {
+                        if(x==null && y==null && angle>=previousAngle) {
                             smallestAngle = angle;
                             x = e.getX();
                             y = e.getY();
@@ -194,7 +194,7 @@ public class Surface {
                 convexHull.addPoint(new Point(x, y));
                 previous = new Point(x, y);
             }
-            if(counter>10)
+            if(counter>20)
                 break;
         }while(true);
 

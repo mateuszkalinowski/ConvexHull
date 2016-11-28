@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -45,6 +46,10 @@ public class MainWindow extends JFrame {
         //mainMenu.add(editMenu);
         mainMenu.add(helpMenu);
 
+        URL imgURL = this.getClass().getResource("networking.png");
+        ImageIcon icon = new ImageIcon(imgURL);
+        setIconImage(icon.getImage());
+        com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
         JMenuItem exitAction = new JMenuItem("Zakończ");
         exitAction.addActionListener(e -> {
             System.exit(0);
