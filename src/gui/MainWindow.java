@@ -103,12 +103,18 @@ public class MainWindow extends JFrame {
                     try {
                         int x = Integer.parseInt(xValue.getText());
                         int y = Integer.parseInt(yValue.getText());
-                        if(!mainSurface.contains(new Point(x,y))) {
-                            pointsListModel.addElement("X: " + x + ", Y: " + y);
-                            xValue.setText("");
-                            yValue.setText("");
-                            mainSurface.add(new Point(x, y));
-                            repaint();
+                        if(Math.abs(x)<=ConvexHull.maxRange/2 && Math.abs(y)<=ConvexHull.maxRange/2) {
+                            if (!mainSurface.contains(new Point(x, y))) {
+                                pointsListModel.addElement("X: " + x + ", Y: " + y);
+                                xValue.setText("");
+                                yValue.setText("");
+                                mainSurface.add(new Point(x, y));
+                                repaint();
+                            }
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(null, "Przekroczono zakres! Maksymalny zakres x i y: " + ConvexHull.maxRange/2, "Błąd" +
+                                    " danych",JOptionPane.ERROR_MESSAGE);
                         }
                     }
                     catch (NumberFormatException ignored){
@@ -125,12 +131,18 @@ public class MainWindow extends JFrame {
                     try {
                         int x = Integer.parseInt(xValue.getText());
                         int y = Integer.parseInt(yValue.getText());
-                        if(!mainSurface.contains(new Point(x,y))) {
-                            pointsListModel.addElement("X: " + x + ", Y: " + y);
-                            xValue.setText("");
-                            yValue.setText("");
-                            mainSurface.add(new Point(x, y));
-                            repaint();
+                        if(Math.abs(x)<=ConvexHull.maxRange/2 && Math.abs(y)<=ConvexHull.maxRange/2) {
+                            if (!mainSurface.contains(new Point(x, y))) {
+                                pointsListModel.addElement("X: " + x + ", Y: " + y);
+                                xValue.setText("");
+                                yValue.setText("");
+                                mainSurface.add(new Point(x, y));
+                                repaint();
+                            }
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(null, "Przekroczono zakres! Maksymalny zakres x i y: " + ConvexHull.maxRange/2, "Błąd" +
+                                    " danych",JOptionPane.ERROR_MESSAGE);
                         }
                     }
                     catch (NumberFormatException ignored){
@@ -151,20 +163,18 @@ public class MainWindow extends JFrame {
             try {
                 int x = Integer.parseInt(xValue.getText());
                 int y = Integer.parseInt(yValue.getText());
-                if(!mainSurface.contains(new Point(x,y))) {
-                    pointsListModel.addElement("X: " + x + ", Y: " + y);
-                    xValue.setText("");
-                    yValue.setText("");
-                    mainSurface.add(new Point(x, y));
-                   /* if(convexHull!=null) {
-                        if(!convexHull.isInside(x,y)) {
-                            convexHull = null;
-                            polygonPointsListModel.clear();
-                            powierzchniaOtoczkiLabel.setText("");
-                            powierzchniaOtoczkiLabel.setToolTipText("");
-                        }
-                    }*/
-                    repaint();
+                if(Math.abs(x)<=ConvexHull.maxRange/2 && Math.abs(y)<=ConvexHull.maxRange/2) {
+                    if (!mainSurface.contains(new Point(x, y))) {
+                        pointsListModel.addElement("X: " + x + ", Y: " + y);
+                        xValue.setText("");
+                        yValue.setText("");
+                        mainSurface.add(new Point(x, y));
+                        repaint();
+                    }
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Przekroczono zakres! Maksymalny zakres x i y: " + ConvexHull.maxRange/2, "Błąd" +
+                            " danych",JOptionPane.ERROR_MESSAGE);
                 }
             }
             catch (NumberFormatException ignored){
@@ -207,12 +217,23 @@ public class MainWindow extends JFrame {
         JButton randomizePointsButton = new JButton("Losuj");
         randomizePointsButton.addActionListener(e -> {
             try {
-                Random rnd = new Random();
-                for (int i = 0; i < Integer.parseInt(randomPointsNumber.getText()); i++) {
-                    int x = rnd.nextInt(Integer.parseInt(randomPointsRange.getText())) - Integer.parseInt(randomPointsRange.getText())/2;
-                    int y = rnd.nextInt(Integer.parseInt(randomPointsRange.getText())) - Integer.parseInt(randomPointsRange.getText())/2;
-                    mainSurface.add(new geometry.Point(x, y));
-                    pointsListModel.addElement("X: " + x + ", Y: " + y);
+                if(Integer.parseInt(randomPointsNumber.getText())<=10000) {
+                    if (Integer.parseInt(randomPointsRange.getText()) <= ConvexHull.maxRange) {
+                        Random rnd = new Random();
+                        for (int i = 0; i < Integer.parseInt(randomPointsNumber.getText()); i++) {
+                            int x = rnd.nextInt(Integer.parseInt(randomPointsRange.getText())) - Integer.parseInt(randomPointsRange.getText()) / 2;
+                            int y = rnd.nextInt(Integer.parseInt(randomPointsRange.getText())) - Integer.parseInt(randomPointsRange.getText()) / 2;
+                            mainSurface.add(new geometry.Point(x, y));
+                            pointsListModel.addElement("X: " + x + ", Y: " + y);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Maksymalny zakres losowania to: " + ConvexHull.maxRange, "Błąd" +
+                                " danych", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Naraz można wylosować do 10000 punktów.","Błąd" +
+                            " danych", JOptionPane.ERROR_MESSAGE);
                 }
                 repaint();
             } catch (Exception ignored){
@@ -248,7 +269,7 @@ public class MainWindow extends JFrame {
         testButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(pointsListModel.getSize()>=3) {
+                if(pointsListModel.getSize()>=2) {
                     convexHull = mainSurface.createConvexHull();
                     polygonPointsListModel.removeAllElements();
                     for(Point point: convexHull.returnPointsAsArray())
@@ -324,8 +345,10 @@ public class MainWindow extends JFrame {
                         String y = line.split(",")[1];
                         x = x.substring(3,x.length());
                         y = y.substring(4,y.length());
-                        mainSurface.add(new Point(Integer.parseInt(x),Integer.parseInt(y)));
-                        pointsListModel.addElement(line);
+                        if(Math.abs(Integer.parseInt(x))<=ConvexHull.maxRange/2 && Math.abs(Integer.parseInt(y))<=ConvexHull.maxRange/2) {
+                            mainSurface.add(new Point(Integer.parseInt(x), Integer.parseInt(y)));
+                            pointsListModel.addElement(line);
+                        }
                     }
                     in.close();
                     repaint();

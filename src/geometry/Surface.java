@@ -117,11 +117,9 @@ public class Surface {
         Double previousAngle = 0.0;
 
         Double smallestAngle = null;
-        int counter = 0;
         Integer x = null;
         Integer y = null;
         do {
-                counter++;
                 x = null;
                 y = null;
                 Double longestDistance = null;
@@ -194,8 +192,6 @@ public class Surface {
                 convexHull.addPoint(new Point(x, y));
                 previous = new Point(x, y);
             }
-            if(counter>20)
-                break;
         }while(true);
 
         return convexHull;

@@ -16,14 +16,6 @@ import java.util.Random;
 public class ConvexHull {
     public static void main(String[] args) {
         mainSurface = new Surface();
-       // Random rnd = new Random();
-        //rnd.setSeed(1);
-       /* for(int i = 0; i < 8; i ++) {
-            int x = rnd.nextInt(100)-50;
-            int y = rnd.nextInt(100)-50;
-            mainSurface.add(new Point(x,y));
-        }*/
-        //convexHull = mainSurface.createConvexHull();
         EventQueue.invokeLater(() -> {
             mainFrame = new MainWindow();
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -33,4 +25,6 @@ public class ConvexHull {
     public static Polygon convexHull;
     public static Surface mainSurface;
     public static MainWindow mainFrame;
+
+    public static int maxRange = 20000;
 }
